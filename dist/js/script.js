@@ -1,4 +1,4 @@
-//Jquery pre-loader
+// Jquery pre-loader
 $(window).on("load", function () {
   $(".loader-container").fadeOut(1000);
 });
@@ -11,10 +11,10 @@ $(window).on("load", function () {
     menuOverlay = document.querySelector(".menu-overlay"),
     mediaSize = 991;
 
-  openNavMenu.addEventListener("click", toggleNav);
-  closeNavMenu.addEventListener("click", toggleNav);
+  if (openNavMenu) openNavMenu.addEventListener("click", toggleNav);
+  if (closeNavMenu) closeNavMenu.addEventListener("click", toggleNav);
   // close the navMenu by clicking outside
-  menuOverlay.addEventListener("click", toggleNav);
+  if (menuOverlay) menuOverlay.addEventListener("click", toggleNav);
 
   function toggleNav() {
     navMenu.classList.toggle("open");
@@ -22,29 +22,32 @@ $(window).on("load", function () {
     document.body.classList.toggle("hidden-scrolling");
   }
 
-  navMenu.addEventListener("click", (event) => {
-    if (
-      event.target.hasAttribute("data-toggle") &&
-      window.innerWidth <= mediaSize
-    ) {
-      // prevent default anchor click behavior
-      event.preventDefault();
-      const menuItemHasChildren = event.target.parentElement;
-      // if menuItemHasChildren is already expanded, collapse it
-      if (menuItemHasChildren.classList.contains("active")) {
-        collapseSubMenu();
-      } else {
-        // collapse existing expanded menuItemHasChildren
-        if (navMenu.querySelector(".menu-item-has-children.active")) {
+  if (navMenu) {
+    navMenu.addEventListener("click", (event) => {
+      if (
+        event.target.hasAttribute("data-toggle") &&
+        window.innerWidth <= mediaSize
+      ) {
+        // prevent default anchor click behavior
+        event.preventDefault();
+        const menuItemHasChildren = event.target.parentElement;
+        // if menuItemHasChildren is already expanded, collapse it
+        if (menuItemHasChildren.classList.contains("active")) {
           collapseSubMenu();
+        } else {
+          // collapse existing expanded menuItemHasChildren
+          if (navMenu.querySelector(".menu-item-has-children.active")) {
+            collapseSubMenu();
+          }
+          // expand new menuItemHasChildren
+          menuItemHasChildren.classList.add("active");
+          const subMenu = menuItemHasChildren.querySelector(".sub-menu");
+          subMenu.style.maxHeight = subMenu.scrollHeight + "px";
         }
-        // expand new menuItemHasChildren
-        menuItemHasChildren.classList.add("active");
-        const subMenu = menuItemHasChildren.querySelector(".sub-menu");
-        subMenu.style.maxHeight = subMenu.scrollHeight + "px";
       }
-    }
-  });
+    });
+  }
+
   function collapseSubMenu() {
     navMenu
       .querySelector(".menu-item-has-children.active .sub-menu")
@@ -71,8 +74,31 @@ $(window).on("load", function () {
   });
 })();
 
-// programmes slider
+// ==========================================
+// NEW: HERO SECTION FADE SLIDER (jQuery)
+// ==========================================
+$(function () {
+  // Select all slides
+  var $slides = $(".hero-slide");
+  var currentIndex = 0;
+  var totalSlides = $slides.length;
 
+  // Only run if we actually have slides
+  if (totalSlides > 0) {
+    setInterval(function () {
+      // 1. Remove 'active' class from the current slide
+      $slides.eq(currentIndex).removeClass("active");
+
+      // 2. Calculate the next index (loops back to 0 automatically)
+      currentIndex = (currentIndex + 1) % totalSlides;
+
+      // 3. Add 'active' class to the new slide
+      $slides.eq(currentIndex).addClass("active");
+    }, 5000); // Change image every 5000ms (5 seconds)
+  }
+});
+
+// programmes slider (Commented out as in your original file)
 // $(".main-content .owl-carousel").owlCarousel({
 //   loop: true,
 //   margin: 20,
@@ -82,7 +108,7 @@ $(window).on("load", function () {
 //     '<i class="fas fa-arrow-circle-left" aria-hidden="true"></i>',
 //     '<i class="fas fa-arrow-circle-right" aria-hidden="true"></i>',
 //   ],
-//   navContainer: ".main-content .custom-nav", 
+//   navContainer: ".main-content .custom-nav",
 //   responsive: {
 //     0: {
 //       items: 1,
@@ -95,4 +121,3 @@ $(window).on("load", function () {
 //     },
 //   },
 // });
-

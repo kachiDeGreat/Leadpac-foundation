@@ -13,9 +13,10 @@ html {
   scroll-behavior: smooth;
 }
 
+/* CHANGED: Selection color to Logo Green */
 ::selection {
   color: #fff;
-  background: rgb(236, 160, 18);
+  background: #006b33;
 }
 
 /* Jquery pre-loader style */
@@ -36,10 +37,11 @@ html {
   --fg: hsl(var(--hue), 10%, 90%);
 }
 
+/* CHANGED: Tally color to Logo Green */
 .tally {
   width: 3em;
   height: 3em;
-  color: #e91e1e;
+  color: #006b33;
 }
 .tally__line,
 .tally__path {
@@ -71,10 +73,11 @@ h3.title {
   padding-top: 3rem;
 }
 
+/* CHANGED: Title underline to Logo Green */
 h3.title:before,
 h3.title:after {
   position: absolute;
-  background: #e91e1e;
+  background: #006b33;
   width: 10%;
   height: 2px;
   content: " ";
@@ -116,53 +119,108 @@ a {
 }
 
 /* hero */
-.hero-image {
-  background-image: url("../images/banner-imgt.jpg");
-  height: 650px;
+
+/* hero wrapper */
+.hero-wrapper {
+  position: relative;
+  height: 60vh;
+  min-height: 600px;
+  overflow: hidden;
+}
+
+/* Container for slides */
+.hero-carousel {
+  width: 100%;
+  height: 100%;
+}
+
+/* Individual Slide */
+.hero-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: fixed;
-  position: relative;
+  background-attachment: fixed; /* Parallax effect */
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  z-index: 1;
 }
-.dark_cover {
+
+/* Show the active slide */
+.hero-slide.active {
+  opacity: 1;
+  z-index: 2;
+}
+
+/* Dark Green Overlay - Now inside the slide */
+.hero-slide .dark_cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(
     to left,
     rgba(0, 0, 0, 0.857),
-    rgba(240, 124, 16, 0.515)
+    rgba(0, 107, 51, 0.6)
   );
-  height: 100%;
-  width: 100%;
+  z-index: 1;
 }
-.hero-text {
+
+/* Text Container */
+.hero-slide .hero-text {
   position: absolute;
-  top: 45%;
-  left: 40%;
+  top: 50%;
+  left: 50%; /* Adjust based on preference */
   transform: translate(-50%, -50%);
-  max-width: 75%;
-  color: white;
-}
-.hero-text h1 {
-  font-weight: bold;
+  max-width: 100%;
   text-transform: uppercase;
-  letter-spacing: 4px;
+  color: white;
+  z-index: 10; /* Ensures text is above the overlay */
 }
-@media (max-width: 400px) {
-  .hero-text {
-    left: 45%;
+
+/* Mobile fix for text position */
+@media (max-width: 768px) {
+  .hero-slide .hero-text {
+    left: 50%;
+    text-align: center;
+    /* width: 90%; */
   }
 }
 
-/* .hero-exclusions {
-  position: fixed;
-  text-align: center;
-  top: 88%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-} */
+/* =========================================
+   TEXT ANIMATIONS (Fade In Up)
+   ========================================= */
 
-.hero-text a {
+/* 1. Initial State: Hidden and slightly pushed down */
+.hero-slide .hero-text h1,
+.hero-slide .hero-text p,
+.hero-slide .hero-text a {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease-out;
+}
+
+/* 2. Styles for the elements */
+.hero-slide .hero-text h1 {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 40px;
+  color: #fff;
+}
+
+.hero-slide .hero-text p {
+  margin-top: 15px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.hero-slide .hero-text a {
   border: none;
   text-transform: uppercase;
   outline: 0;
@@ -174,11 +232,39 @@ a {
   cursor: pointer;
   border: 5px solid black;
   margin-left: -1px;
-  margin-top: 2%;
+  margin-top: 25px;
   font-size: 8pt;
   letter-spacing: 5px;
   font-weight: bold;
-  transition: 0.1 ease-in-out;
+}
+
+/* 3. Active State: Trigger Animation when slide is active */
+/* Title comes in first */
+.hero-slide.active .hero-text h1 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.5s; /* Waits for slide to fade in a bit */
+}
+
+/* Paragraph comes in second */
+.hero-slide.active .hero-text p {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.7s;
+}
+
+/* Button comes in last */
+.hero-slide.active .hero-text a {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.9s;
+}
+
+/* Hover effect for button */
+.hero-slide .hero-text a:hover {
+  background-color: #006b33;
+  border-color: #006b33;
+  transition: 0.3s;
 }
 
 /* about us */
@@ -186,7 +272,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 100px;
+  margin-top: 60px;
 }
 .aboutus .box {
   overflow: hidden;
@@ -206,8 +292,9 @@ a {
   transition-delay: 0.1s;
   font-size: 15px;
 }
+/* CHANGED: Readmore link color to Logo Green */
 .readmore {
-  color: #dc3545;
+  color: #006b33;
   overflow: hidden;
   display: inline-block;
   font-size: 0.75rem;
@@ -221,7 +308,7 @@ a {
   animation-fill-mode: forwards;
   animation-duration: 0.4s;
   animation-timing-function: cubic-bezier(0.6, 0.01, 0, 1);
-  background-color: #dc3545;
+  background-color: #006b33;
   bottom: 0;
   height: 0.125rem;
   margin: auto;
@@ -236,7 +323,7 @@ a {
 }
 
 .readmore:hover {
-  color: #dc3545;
+  color: #006b33;
 }
 .readmore span {
   position: relative;
@@ -347,8 +434,9 @@ a {
   cursor: not-allowed;
 }
 
+/* CHANGED: Disabled Button Hover to Logo Green */
 .upcoming_event_tab a:hover {
-  background-color: #bb2d3b;
+  background-color: #006b33;
 }
 
 /* programmes tab */
@@ -481,7 +569,7 @@ a {
 
 .numscroller:before {
   content: " ";
-  /* background: #e91e1e; */
+  /* background: #006B33; */
   width: 30%;
   height: 8px;
   position: absolute;
@@ -489,11 +577,12 @@ a {
   left: 35%;
 }
 
+/* CHANGED: Gradient to Dark Logo Green Overlay */
 .cover {
   background: linear-gradient(
     to left,
     rgba(0, 0, 0, 0.857),
-    rgba(240, 124, 16, 0.515)
+    rgba(0, 107, 51, 0.6)
   );
   height: 99%;
   width: 100%;
@@ -694,8 +783,9 @@ a.read_more {
   transition: 0.3s;
 }
 
+/* CHANGED: Social Media Hover to Logo Green */
 .social-media a:hover {
-  color: #e91e1e;
+  color: #006b33;
 }
 
 .back-btn-wrap {
@@ -703,13 +793,14 @@ a.read_more {
   margin-left: 2.5rem;
 }
 
+/* CHANGED: Back Button background to Logo Green */
 .back-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 55px;
   width: 55px;
-  background-color: #e91e1e;
+  background-color: #006b33;
   border-radius: 50%;
   color: #fff;
   font-size: 1.2rem;
@@ -846,4 +937,144 @@ a.read_more {
   .followme-wrap {
     margin-top: 0.8rem;
   }
+}
+/* Logo Section Styles - Super Clean Version */
+.logo-section {
+  padding: 40px 0;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  padding: 20px;
+}
+
+.logo-img {
+  max-width: 100%;
+  max-height: 90px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+/* Simple hover effect: just scale up */
+.logo-container:hover .logo-img {
+  transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .logo-container {
+    height: 100px;
+    padding: 15px;
+  }
+
+  .logo-img {
+    max-height: 60px;
+  }
+}
+
+@media (max-width: 576px) {
+  .logo-container {
+    height: 80px;
+    padding: 10px;
+  }
+
+  .logo-img {
+    max-height: 50px;
+  }
+}
+
+/* Team Member Overlay Styles */
+.team-member {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
+
+.team-member img {
+  width: 100%;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.team-member:hover img {
+  transform: scale(1.05);
+}
+
+.member-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 40px 15px 15px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.7) 40%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+  color: #fff;
+  text-align: left;
+}
+
+.member-info h1 {
+  font-size: 1.15rem !important;
+  font-weight: 700;
+  margin: 0 0 5px 0 !important;
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.member-info p {
+  font-size: 0.85rem !important;
+  color: #e0e0e0 !important;
+  margin: 0 0 5px 0 !important;
+  text-transform: capitalize !important;
+}
+
+.member-info h6 {
+  font-size: 0.8rem !important;
+  color: #bbb !important;
+  margin: 0 0 15px 0 !important;
+}
+
+.member-info .link-icon {
+  display: flex;
+  gap: 10px;
+}
+
+.member-info .social-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.member-info .social-box i {
+  font-size: 1rem;
+  padding: 0 !important;
+}
+
+.member-info .social-box.linkedin i {
+  color: #0077b5;
+}
+
+.member-info .social-box.instagram i {
+  color: #bc2a8d;
+}
+
+.member-info .social-box:hover {
+  transform: translateY(-3px);
+  background-color: #f1f1f1;
 }
