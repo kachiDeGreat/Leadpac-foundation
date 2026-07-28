@@ -121,3 +121,47 @@ $(function () {
 //     },
 //   },
 // });
+
+// --- Global Image Lazy Loading & Spinner ---
+document.addEventListener("DOMContentLoaded", function() {
+    function addBgSpinner(el, url) {
+        el.classList.add("bg-lazy-loading");
+        const tempImg = new Image();
+        tempImg.onload = function() {
+            el.classList.remove("bg-lazy-loading");
+        };
+        tempImg.onerror = function() {
+            el.classList.remove("bg-lazy-loading");
+        };
+        tempImg.src = url;
+    }
+
+    // 1. All <img> tags
+    const images = document.querySelectorAll("img");
+    images.forEach(img => {
+        if (img.complete && img.naturalHeight !== 0) return;
+        img.classList.add("lazy-loading-img");
+        img.addEventListener("load", function() {
+            img.classList.remove("lazy-loading-img");
+        });
+        img.addEventListener("error", function() {
+            img.classList.remove("lazy-loading-img");
+        });
+    });
+
+    // 2. Elements with inline background-image or specific classes
+    const bgElements = document.querySelectorAll('*[style*="background-image"], .hero-projects, .banner');
+    bgElements.forEach(el => {
+        let bg = el.style.backgroundImage;
+        if (!bg || bg === "none") {
+            bg = window.getComputedStyle(el).backgroundImage;
+        }
+        if (bg && bg !== "none" && bg.includes("url(")) {
+            const match = bg.match(/url\(['"]?(.*?)['"]?\)/);
+            if (match && match[1]) {
+                addBgSpinner(el, match[1]);
+            }
+        }
+    });
+});
+
